@@ -57,12 +57,15 @@ const SimulatorScreen4 = ({ onNext, simState, setSimState }) => {
                 const metrics = automationBlueprint?.metrics;
                 const result = await getIntelligenceBlueprint(useCases, metrics, { industry, orgName }, simState) || { success: false, data: {} };
                 const blueprintData = result.success ? result.data : (result.data || {});
-                setData(blueprintData);
+
+                // Add isFallback to the data state directly for UI access
+                setData({ ...blueprintData, isFallback: result.isFallback });
+
                 setSimState(prev => ({ ...prev, intelligenceBlueprint: blueprintData, insightCount: (prev.insightCount || 0) + (blueprintData?.intelligenceSignals?.length || 3) }));
             } catch (err) {
                 console.error("Intelligence Loading Error:", err);
                 const bench = getBenchmark(industry);
-                const fallback = { intelligenceSignals: bench.signals, sixMonthForecast: bench.sixMonthForecast, agentsActivated: bench.agentsActivated };
+                const fallback = { intelligenceSignals: bench.signals, sixMonthForecast: bench.sixMonthForecast, agentsActivated: bench.agentsActivated, isFallback: true };
                 setData(fallback);
                 setSimState(prev => ({ ...prev, intelligenceBlueprint: fallback }));
             } finally { setLoading(false); }
@@ -103,7 +106,15 @@ const SimulatorScreen4 = ({ onNext, simState, setSimState }) => {
         <div className="space-y-10 animate-fadeIn">
             <div className="flex justify-between items-end">
                 <div>
-                    <h2 className="text-3xl font-black text-[#0A2342] mb-1 uppercase tracking-tight">Layer 2: Intelligence Blueprint</h2>
+                    <div className="flex items-center gap-3 mb-1">
+                        <h1 className="text-3xl font-black text-[#0A2342] uppercase tracking-tight">Layer 2: <span className="text-[#00B4D8]">Intelligence Blueprint</span></h1>
+                        {data?.isFallback && (
+                            <div className="flex items-center gap-2 px-3 py-1 bg-amber-100 border border-amber-200 rounded-full animate-bounce shadow-sm">
+                                <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+                                <span className="text-[10px] font-bold text-amber-700 uppercase tracking-tighter">Benchmark Fallback Active</span>
+                            </div>
+                        )}
+                    </div>
                     <p className="text-[#4A4A6A]">Foresight signals that move from efficiency to exponential value.</p>
                 </div>
                 <button onClick={handleNext} className="sim-btn-primary">Final Outcome Simulation →</button>

@@ -388,6 +388,11 @@ Rules:
 - Return ONLY the JSON object, no markdown, no explanation`;
 
     try {
+        if (!getApiKey()) {
+            console.warn('[HARI-SIM] No Gemini API key found. Falling back to industry benchmarks.');
+            throw new Error('MISSING_API_KEY');
+        }
+
         const result = await callGemini({
             systemPrompt,
             contents: [{ role: 'user', parts: [{ text: userMessage }] }],
@@ -403,13 +408,15 @@ Rules:
         const parsed = JSON.parse(rawJson);
 
         if (parsed?.intelligenceSignals?.length > 0) {
-            return { success: true, data: parsed };
+            return { success: true, isFallback: false, data: parsed };
         }
         throw new Error('Invalid structure from Gemini');
     } catch (err) {
         console.warn('Intelligence blueprint AI fallback:', err.message);
         return {
             success: false,
+            isFallback: true,
+            errorType: err.message,
             data: {
                 intelligenceSignals: bench?.signals || [
                     { signalName: "Predictive Maintenance", horizon: "PROACTIVE", description: "Early detection of bottleneck patterns.", confidence: 88, action: "Trigger resource reallocation" }
