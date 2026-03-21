@@ -52,7 +52,6 @@ const SimulatorScreen4 = ({ onNext, simState, setSimState }) => {
     const { orgName, industry, useCases, automationBlueprint, intelligenceBlueprint } = simState;
 
     useEffect(() => {
-        if (intelligenceBlueprint) { setData(intelligenceBlueprint); setLoading(false); return; }
         const load = async () => {
             try {
                 const metrics = automationBlueprint?.metrics;

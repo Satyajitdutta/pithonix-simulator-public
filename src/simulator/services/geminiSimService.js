@@ -338,24 +338,87 @@ export const getAutomationBlueprint = async (useCases, context, simState) => {
 // --- SCREEN 4: INTELLIGENCE BLUEPRINT ---
 export const getIntelligenceBlueprint = async (useCases, metrics, context, simState) => {
     const industry = context?.industry || 'General';
+    const orgName = context?.orgName || 'the organisation';
     const bench = getBenchmark(industry);
 
-    return {
-        success: true,
-        data: {
-            intelligenceSignals: bench?.signals || [
-                { signalName: "Predictive Maintenance", horizon: "PROACTIVE", description: "Early detection of bottleneck patterns.", confidence: 88, action: "Trigger resource reallocation" }
-            ],
-            sixMonthForecast: bench?.sixMonthForecast || [
-                { month: 1, capability: "Baseline established" },
-                { month: 3, capability: "Autonomous pattern recognition" },
-                { month: 6, capability: "Self-optimizing workflows" }
-            ],
-            agentsActivated: (bench?.agentsActivated || []).length > 0 ? bench.agentsActivated : [
-                { name: "Strategic Orchestrator", justification: "Aligning operations with core goals." }
-            ]
+    const useCaseSummary = (useCases || []).map((uc, i) =>
+        `${i + 1}. Challenge: "${uc.challenge}" | Root Cause: ${uc.rootCause || 'N/A'} | Impact: ${uc.impact || 'N/A'}`
+    ).join('\n');
+
+    const systemPrompt = `${HARI_IDENTITY}
+
+You are generating the Intelligence Blueprint (Layer 2) for the Pithonix Discovery Simulator.
+Your job is to analyse the specific use cases submitted by the client and generate forward-looking, predictive intelligence signals that reveal hidden risks and opportunity gaps SPECIFIC to their situation.
+
+CRITICAL: Do NOT use generic signals. Every signal must directly relate to the client's stated challenges and industry context.`;
+
+    const userMessage = `Generate an intelligence blueprint for ${orgName}, a company in the ${industry} sector.
+
+Their confirmed use cases and challenges are:
+${useCaseSummary || 'General operational improvement'}
+
+Return a JSON object in this exact structure:
+{
+  "intelligenceSignals": [
+    {
+      "signalName": "Specific signal name directly linked to their challenges",
+      "horizon": "Real-time | 30 days ahead | 60-90 days ahead | 6 months ahead",
+      "description": "1-2 sentence specific description mentioning their actual problem area with a quantified risk e.g. '3 projects showing 8.3% unbilled time'",
+      "confidence": 75-95,
+      "action": "Specific recommended action for this org"
+    }
+  ],
+  "sixMonthForecast": [
+    { "month": 1, "capability": "Short specific milestone" },
+    { "month": 2, "capability": "Short specific milestone" },
+    { "month": 3, "capability": "Short specific milestone" },
+    { "month": 4, "capability": "Short specific milestone" },
+    { "month": 6, "capability": "Short specific milestone" }
+  ],
+  "agentsActivated": [
+    { "name": "Agent Name from standard library", "justification": "One sentence why this agent is activated for their specific challenges" }
+  ]
+}
+
+Rules:
+- Generate exactly 3 intelligenceSignals, tied directly to their stated use cases
+- Generate 5 sixMonthForecast entries (months 1, 2, 3, 4, 6)
+- Generate 4-6 agentsActivated entries
+- Agent names must be from: Strategic Orchestrator, Billing Intelligence Agent, Attrition Predictor, Compliance Sentinel, Revenue Leakage Detector, Delivery Risk Monitor, Learning Gap Analyst, Engagement Pulse Agent, Performance Signal Agent, Talent Flight Risk Agent
+- Return ONLY the JSON object, no markdown, no explanation`;
+
+    try {
+        const result = await callGemini({
+            systemPrompt,
+            contents: [{ role: 'user', parts: [{ text: userMessage }] }],
+            thinkingLevel: 'low',
+            jsonOutput: true,
+            maxTokens: 1500,
+        });
+
+        if (result?.intelligenceSignals?.length > 0) {
+            return { success: true, data: result };
         }
-    };
+        throw new Error('Invalid structure from Gemini');
+    } catch (err) {
+        console.warn('Intelligence blueprint AI fallback:', err.message);
+        return {
+            success: false,
+            data: {
+                intelligenceSignals: bench?.signals || [
+                    { signalName: "Predictive Maintenance", horizon: "PROACTIVE", description: "Early detection of bottleneck patterns.", confidence: 88, action: "Trigger resource reallocation" }
+                ],
+                sixMonthForecast: bench?.sixMonthForecast || [
+                    { month: 1, capability: "Baseline established" },
+                    { month: 3, capability: "Autonomous pattern recognition" },
+                    { month: 6, capability: "Self-optimizing workflows" }
+                ],
+                agentsActivated: (bench?.agentsActivated || []).length > 0 ? bench.agentsActivated : [
+                    { name: "Strategic Orchestrator", justification: "Aligning operations with core goals." }
+                ]
+            }
+        };
+    }
 };
 
 // --- SCREEN 5: OUTCOME SIMULATION ---
