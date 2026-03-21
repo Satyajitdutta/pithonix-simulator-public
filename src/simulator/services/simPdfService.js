@@ -6,32 +6,37 @@ export const downloadReport = async (orgName) => {
         ]);
 
         const element = document.getElementById('screen5-content');
-        if (!element) { console.warn('screen5-content not found'); return; }
+        if (!element) {
+            console.warn('screen5-content not found');
+            alert('Could not find report content to export.');
+            return;
+        }
 
-        const canvas = await html2canvas(element, { scale: 2, useCORS: true, backgroundColor: '#F8FAFC' });
-        const imgData = canvas.toDataURL('image/png');
+        // Use scale: 1.5 to balance quality and file size (prevents 20MB+ files)
+        const canvas = await html2canvas(element, {
+            scale: 1.5,
+            useCORS: true,
+            backgroundColor: '#F8FAFC',
+            logging: false
+        });
+
+        const imgData = canvas.toDataURL('image/jpeg', 0.85); // Use JPEG with 85% quality to significantly reduce size
         const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
 
         const date = new Date().toISOString().split('T')[0];
-        const safeName = orgName.replace(/[^a-zA-Z0-9]/g, '_');
-        const fileName = `Pithonix_Simulation_${safeName}_${date}.pdf`;
+        const safeName = (orgName || 'Simulation').toString().replace(/[^a-zA-Z0-9]/g, '_');
+        const fileName = `Pithonix_ROI_Report_${safeName}_${date}.pdf`;
 
-        const blob = pdf.output('blob');
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        // Use native jsPDF save method
+        pdf.save(fileName);
     } catch (err) {
         console.error('PDF generation error:', err);
+        alert('Could not generate PDF. Please try again or check your browser console.');
         throw err;
     }
 };
