@@ -165,7 +165,14 @@ const industryBenchmarks = {
             manager: "GCC team leads currently compile global stakeholder reports manually — averaging 8 hours per week in data gathering alone. Pithonix delivers automated stakeholder-ready reports with live delivery metrics, team health indicators, and risk flags — before every global review call."
         },
         estimatedROI: { annualValue: "₹4.1Cr", reduction: "44%", paybackMonths: 6 },
-        discoveryScore: 91
+        discoveryScore: 91,
+        legacySystems: [
+            { id: 'sap', name: 'SAP SuccessFactors', category: 'HR' },
+            { id: 'workday', name: 'Workday HCM', category: 'HR' },
+            { id: 'jira', name: 'Jira Software', category: 'Project Management' },
+            { id: 'servicenow', name: 'ServiceNow', category: 'ITSM' },
+            { id: 'sharepoint', name: 'SharePoint', category: 'Collaboration' }
+        ]
     },
     "Manufacturing & Industrial": {
         attritionCostPerHire: 124000,
@@ -195,7 +202,14 @@ const industryBenchmarks = {
             manager: "Plant managers currently receive production data in daily reports compiled manually by supervisors. Pithonix delivers a live plant intelligence dashboard — OEE by line, quality metrics, maintenance status, and supply chain risk — available at any time on any device."
         },
         estimatedROI: { annualValue: "₹2.2Cr", reduction: "31%", paybackMonths: 8 },
-        discoveryScore: 82
+        discoveryScore: 82,
+        legacySystems: [
+            { id: 'sap', name: 'SAP ERP', category: 'ERP' },
+            { id: 'oracle', name: 'Oracle EBS', category: 'ERP' },
+            { id: 'mes', name: 'MES System', category: 'Manufacturing' },
+            { id: 'scada', name: 'SCADA', category: 'Automation' },
+            { id: 'infor', name: 'Infor CloudSuite', category: 'ERP' }
+        ]
     },
     "Retail & FMCG": {
         attritionCostPerHire: 98000,
@@ -223,7 +237,13 @@ const industryBenchmarks = {
             manager: "Regional managers currently visit stores to assess performance. Pithonix delivers a live regional intelligence dashboard — sales velocity, stock health, staff utilisation, and shrinkage signals — before every review."
         },
         estimatedROI: { annualValue: "₹1.9Cr", reduction: "29%", paybackMonths: 9 },
-        discoveryScore: 79
+        discoveryScore: 79,
+        legacySystems: [
+            { id: 'sap', name: 'SAP ERP', category: 'ERP' },
+            { id: 'salesforce', name: 'Salesforce CRM', category: 'CRM' },
+            { id: 'pos', name: 'Legacy POS System', category: 'Retail' },
+            { id: 'wms', name: 'WMS / Warehouse System', category: 'Warehouse' }
+        ]
     },
     "Education & EdTech": {
         attritionCostPerHire: 112000,
@@ -249,7 +269,13 @@ const industryBenchmarks = {
             manager: "Programme directors currently compile student performance and engagement data manually for accreditation reviews. Pithonix delivers automated programme health reports — attendance, assessment outcomes, engagement scores, and risk flags — on demand."
         },
         estimatedROI: { annualValue: "₹1.4Cr", reduction: "26%", paybackMonths: 10 },
-        discoveryScore: 76
+        discoveryScore: 76,
+        legacySystems: [
+            { id: 'lms', name: 'LMS Platform', category: 'Learning' },
+            { id: 'sis', name: 'Student Information System', category: 'Academic' },
+            { id: 'erp', name: 'Campus ERP', category: 'ERP' },
+            { id: 'crm', name: 'Admissions CRM', category: 'CRM' }
+        ]
     },
     "Infrastructure & Real Estate": {
         attritionCostPerHire: 142000,
@@ -275,7 +301,13 @@ const industryBenchmarks = {
             manager: "Project directors currently compile cross-site performance reports manually for board reviews. Pithonix delivers an automated portfolio intelligence brief — schedule health, budget status, vendor performance, and risk flags — 24 hours before every board meeting."
         },
         estimatedROI: { annualValue: "₹2.4Cr", reduction: "33%", paybackMonths: 8 },
-        discoveryScore: 81
+        discoveryScore: 81,
+        legacySystems: [
+            { id: 'erp', name: 'Oracle EBS / SAP', category: 'ERP' },
+            { id: 'pm', name: 'MS Project', category: 'Project Management' },
+            { id: 'autocad', name: 'AutoCAD / Revit', category: 'Design' },
+            { id: 'crm', name: 'Salesforce CRM', category: 'CRM' }
+        ]
     },
     "Pharmaceuticals & Life Sciences": {
         attritionCostPerHire: 228000,
@@ -301,7 +333,13 @@ const industryBenchmarks = {
             manager: "Quality directors and regulatory heads currently prepare compliance dashboards manually for every leadership review. Pithonix delivers automated compliance intelligence — batch quality, audit status, deviation tracking, and submission timelines — on demand."
         },
         estimatedROI: { annualValue: "₹3.4Cr", reduction: "39%", paybackMonths: 7 },
-        discoveryScore: 88
+        discoveryScore: 88,
+        legacySystems: [
+            { id: 'veeva', name: 'Veeva Vault', category: 'Regulatory' },
+            { id: 'lims', name: 'LIMS', category: 'Lab Management' },
+            { id: 'sap', name: 'SAP ERP', category: 'ERP' },
+            { id: 'qms', name: 'QMS Platform', category: 'Quality' }
+        ]
     },
     "Logistics & Supply Chain": {
         attritionCostPerHire: 118000,
@@ -327,10 +365,27 @@ const industryBenchmarks = {
             manager: "Operations managers currently compile delivery performance reports manually for every client review. Pithonix delivers automated delivery intelligence — on-time rates, zone performance, driver utilisation, and SLA risk — before every client call."
         },
         estimatedROI: { annualValue: "₹1.8Cr", reduction: "31%", paybackMonths: 8 },
-        discoveryScore: 84
+        discoveryScore: 84,
+        legacySystems: [
+            { id: 'tms', name: 'TMS / Transport System', category: 'Logistics' },
+            { id: 'wms', name: 'WMS', category: 'Warehouse' },
+            { id: 'erp', name: 'SAP ERP', category: 'ERP' },
+            { id: 'gps', name: 'GPS / Fleet Tracking', category: 'Fleet' }
+        ]
     }
 };
 
-export const getBenchmark = (industry) => industryBenchmarks[industry] || industryBenchmarks["IT & Technology Services"];
+export const getBenchmark = (industry) => {
+    const match = industryBenchmarks[industry] || industryBenchmarks['IT & Technology Services'];
+    // Always guarantee a non-empty legacySystems array so Step 2 checkboxes render
+    if (!match.legacySystems || match.legacySystems.length === 0) {
+        match.legacySystems = [
+            { id: 'erp', name: 'Legacy ERP System', category: 'ERP' },
+            { id: 'crm', name: 'CRM Platform', category: 'CRM' },
+            { id: 'hrms', name: 'HRMS', category: 'HR' }
+        ];
+    }
+    return match;
+};
 
 export default industryBenchmarks;
