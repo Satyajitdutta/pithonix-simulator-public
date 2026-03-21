@@ -396,8 +396,14 @@ Rules:
             maxTokens: 1500,
         });
 
-        if (result?.intelligenceSignals?.length > 0) {
-            return { success: true, data: result };
+        if (!result?.success) throw new Error(result?.error || 'Gemini call failed');
+
+        // callGemini returns { success, text, thought } — the JSON is in result.text
+        const rawJson = (result.text || '').replace(/```json|```/g, '').trim();
+        const parsed = JSON.parse(rawJson);
+
+        if (parsed?.intelligenceSignals?.length > 0) {
+            return { success: true, data: parsed };
         }
         throw new Error('Invalid structure from Gemini');
     } catch (err) {
