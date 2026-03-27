@@ -131,6 +131,54 @@ const calculateUseCasePain = (useCase, rates, bench, orgSize) => {
             };
         }
 
+        case 'Strategy':
+        case 'Corporate Strategy':
+        case 'Business Development':
+        case 'BD':
+        case 'Growth':
+        case 'Partnerships': {
+            // Cost = manual research waste + addressable missed revenue opportunity
+            const bdTeamSize = rates.bdTeamSize || 5;
+            const avgSalary = rates.avgMonthlySalary || 150000;
+            const manualResearchWaste = bdTeamSize * avgSalary * 12 * 0.45;
+            const avgDealValue = rates.avgDealSize ? rates.avgDealSize * 100_000 : 8_000_000;
+            const missedDealsPerYear = rates.missedDeals || 10;
+            const captureRateImprovement = 0.25;
+            const missedRevenue = avgDealValue * missedDealsPerYear * captureRateImprovement;
+            const annualCost = manualResearchWaste + missedRevenue;
+            return {
+                annualCost,
+                formula: `${bdTeamSize} BD analysts × ${formatINR(avgSalary)}/month × 45% research waste + ${formatINR(missedRevenue)} addressable missed opportunity`,
+                assumptions: [
+                    `45% of BD team time on manual research and intelligence gathering`,
+                    `${missedDealsPerYear} qualified prospects missed per year without live signals`,
+                    `25% incremental capture rate improvement with AI-driven intelligence`
+                ]
+            };
+        }
+
+        case 'Market Intelligence':
+        case 'Market Entry':
+        case 'GCC':
+        case 'International': {
+            const analystTeamSize = rates.analystTeamSize || 4;
+            const avgSalary = rates.avgMonthlySalary || 160000;
+            const researchWaste = analystTeamSize * avgSalary * 12 * 0.60;
+            const marketSize = rates.targetMarketRevenue ? rates.targetMarketRevenue * 10_000_000 : 50_000_000;
+            const penetrationDelta = 0.04;
+            const missedRevenue = marketSize * penetrationDelta;
+            const annualCost = researchWaste + missedRevenue;
+            return {
+                annualCost,
+                formula: `${analystTeamSize} analysts × ${formatINR(avgSalary)}/month × 60% manual research + ${formatINR(missedRevenue)} market penetration gap`,
+                assumptions: [
+                    `60% analyst time on manual intelligence gathering`,
+                    `4% addressable market penetration improvement with live intelligence`,
+                    `Target market revenue base used for opportunity sizing`
+                ]
+            };
+        }
+
         default: {
             const headcount = parseOrgSize(orgSize);
             const avgSalary = rates.avgMonthlySalary || 70000;
@@ -167,7 +215,13 @@ export const calculateCurrentAnnualPain = (useCases, rateInputs, industry, orgSi
     return { total, breakdown, currency: 'INR' };
 };
 
-const recoveryRates = { HR: 0.72, Finance: 0.68, Operations: 0.61, IT: 0.79, Sales: 0.54, default: 0.58 };
+const recoveryRates = {
+    HR: 0.72, Finance: 0.68, Operations: 0.61, IT: 0.79, Sales: 0.54,
+    Strategy: 0.68, 'Corporate Strategy': 0.68, 'Business Development': 0.68,
+    BD: 0.68, Growth: 0.68, Partnerships: 0.68,
+    'Market Intelligence': 0.72, 'Market Entry': 0.72, GCC: 0.72, International: 0.72,
+    default: 0.58
+};
 const TYPICAL_ANNUAL_CONTRACT = 2_700_000; // ₹27L
 
 export const calculatePostPithonixResidual = (currentPain) => {

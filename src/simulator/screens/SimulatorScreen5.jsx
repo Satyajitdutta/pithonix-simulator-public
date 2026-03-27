@@ -97,6 +97,7 @@ const SimulatorScreen5 = ({ simState, setSimState, onAddUseCase }) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [activePanel, setActivePanel] = useState(0);
+    const [forPdf, setForPdf] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pdfLoading, setPdfLoading] = useState(false);
     const [valueCalcs, setValueCalcs] = useState(null);
@@ -237,7 +238,7 @@ const SimulatorScreen5 = ({ simState, setSimState, onAddUseCase }) => {
                                 </div>
                                 {isActive ? <ChevronUp size={18} className="text-[#66fcf1]" /> : <ChevronDown size={18} className="text-[#8b8c8d]" />}
                             </button>
-                            {isActive && (
+                            {(isActive || forPdf) && (
                                 <div className="px-6 pb-6 space-y-4 animate-fadeIn">
                                     <p className="text-sm text-[#c5c6c7] leading-relaxed">{pd.narrative || bench.outcomeNarratives?.[p.key]}</p>
                                     {Array.isArray(pd.metrics) && pd.metrics.length > 0 && (
@@ -283,7 +284,16 @@ const SimulatorScreen5 = ({ simState, setSimState, onAddUseCase }) => {
                 </p>
                 <div className="flex flex-col md:flex-row gap-4 justify-center mt-2">
                     <button
-                        onClick={async () => { setPdfLoading(true); try { await downloadReport(orgName); } finally { setPdfLoading(false); } }}
+                        onClick={async () => {
+                            setPdfLoading(true);
+                            try {
+                                await downloadReport(
+                                    orgName,
+                                    () => setForPdf(true),
+                                    () => setForPdf(false)
+                                );
+                            } finally { setPdfLoading(false); }
+                        }}
                         disabled={pdfLoading}
                         className="bg-[#66fcf1] text-[#0b0c10] px-8 py-4 rounded-2xl font-black text-lg hover:bg-[#45a29e] transition-all flex items-center justify-center gap-3 disabled:opacity-70"
                     >
