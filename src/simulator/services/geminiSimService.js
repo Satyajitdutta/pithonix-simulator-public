@@ -279,6 +279,50 @@ export const testConnection = async () => true;
 export const extractComprehension = (text) => text;
 
 // --- SCREEN 3: AUTOMATION BLUEPRINT ---
+// Maps a department/challenge type to a real agent from agentLibrary
+function resolveAgentName(department, challenge) {
+    const d = (department || '').toLowerCase();
+    const c = (challenge || '').toLowerCase();
+    if (d.includes('market') || c.includes('market') || c.includes('gcc') || c.includes('penetrat') || c.includes('expansion')) return 'Market Intelligence Agent';
+    if (d.includes('partner') || c.includes('partner') || c.includes('alliance')) return 'Partnership Discovery Agent';
+    if (d.includes('sales') || c.includes('acquisition') || c.includes('pipeline') || c.includes('prospect')) return 'Client Acquisition Agent';
+    if (d.includes('competi') || c.includes('competi')) return 'Competitive Intelligence Agent';
+    if (d.includes('revenue') || c.includes('revenue') || c.includes('billing') || c.includes('leakage')) return 'Billing Intelligence Agent';
+    if (d.includes('compliance') || c.includes('kyc') || c.includes('aml') || c.includes('audit') || c.includes('regulatory')) return 'Compliance Intelligence Agent';
+    if (d.includes('hr') || d.includes('talent') || c.includes('attrition') || c.includes('retention')) return 'Attrition Prediction Agent';
+    if (d.includes('finance') || d.includes('budget') || c.includes('variance') || c.includes('forecast')) return 'Finance Variance Agent';
+    if (d.includes('delivery') || d.includes('project') || d.includes('pmo') || c.includes('delivery') || c.includes('sprint')) return 'Delivery Risk Agent';
+    if (d.includes('supply') || c.includes('supply') || c.includes('procurement') || c.includes('inventory')) return 'Supply Chain Agent';
+    if (d.includes('operations') || d.includes('manufacturing') || c.includes('oee') || c.includes('production')) return 'OEE Intelligence Agent';
+    if (d.includes('branch') || c.includes('branch')) return 'Branch Intelligence Agent';
+    if (d.includes('headcount') || c.includes('headcount') || c.includes('hiring')) return 'Headcount Intelligence Agent';
+    if (d.includes('skill') || d.includes('learning') || c.includes('skill') || c.includes('training')) return 'Skill Gap Agent';
+    if (d.includes('student') || d.includes('education') || c.includes('student')) return 'Student Success Agent';
+    return 'Global Reporting Agent';
+}
+
+// Returns sensible before/after metrics based on use case type
+function resolveMetrics(department, challenge, matchingBenchmark) {
+    const d = (department || '').toLowerCase();
+    const c = (challenge || '').toLowerCase();
+    const isStrategic = d.includes('market') || d.includes('strategy') || d.includes('partner') || d.includes('sales') ||
+        c.includes('market') || c.includes('gcc') || c.includes('penetrat') || c.includes('expansion') || c.includes('partnership') || c.includes('acquisition');
+    if (isStrategic) {
+        return {
+            today: { timeDays: 21, people: 6, errorRate: 'Incomplete' },
+            automated: { timeHours: 3, people: 'HITL only', errorRate: 'Full coverage' }
+        };
+    }
+    return {
+        today: {
+            timeDays: matchingBenchmark ? parseInt(matchingBenchmark.courseCorrectionTime) * 2 : 14,
+            people: matchingBenchmark ? 3 : 5,
+            errorRate: matchingBenchmark ? '12-18%' : '20%+'
+        },
+        automated: { timeHours: matchingBenchmark ? 2 : 4, people: 'HITL only', errorRate: '<1%' }
+    };
+}
+
 export const getAutomationBlueprint = async (useCases, context, simState) => {
     const industry = context?.industry || 'General';
     const bench = getBenchmark(industry);
@@ -289,20 +333,18 @@ export const getAutomationBlueprint = async (useCases, context, simState) => {
             pc.statement.toLowerCase().includes(uc.challenge.toLowerCase()) ||
             uc.challenge.toLowerCase().includes(pc.statement.toLowerCase())
         );
+        const agentName = resolveAgentName(uc.department, uc.challenge);
+        const metrics = resolveMetrics(uc.department, uc.challenge, matchingBenchmark);
 
         return {
             name: uc.challenge,
             today: {
                 description: uc.impact || "Fragmented manual overhead.",
-                timeDays: matchingBenchmark ? parseInt(matchingBenchmark.courseCorrectionTime) * 2 : 14,
-                people: matchingBenchmark ? 3 : 5,
-                errorRate: matchingBenchmark ? '12-18%' : '20%+'
+                ...metrics.today
             },
             automated: {
-                description: `Pithonix AI orchestrates this via the ${uc.department} Intelligence Agent.`,
-                timeHours: matchingBenchmark ? 2 : 4,
-                people: 'HITL only',
-                errorRate: '<1%'
+                description: `Pithonix AI orchestrates this via the ${agentName}.`,
+                ...metrics.automated
             },
             mindMapData: matchingBenchmark || {
                 statement: uc.challenge,
@@ -384,7 +426,7 @@ Rules:
 - Generate exactly 3 intelligenceSignals, tied directly to their stated use cases
 - Generate 5 sixMonthForecast entries (months 1, 2, 3, 4, 6)
 - Generate 4-6 agentsActivated entries
-- Agent names must be from: Strategic Orchestrator, Billing Intelligence Agent, Attrition Predictor, Compliance Sentinel, Revenue Leakage Detector, Delivery Risk Monitor, Learning Gap Analyst, Engagement Pulse Agent, Performance Signal Agent, Talent Flight Risk Agent
+- Agent names must be chosen from this library only: Attrition Prediction Agent, Compliance Intelligence Agent, Finance Variance Agent, HR Data Consolidation Agent, Delivery Risk Agent, Billing Intelligence Agent, Talent Retention Agent, OEE Intelligence Agent, Quality Prediction Agent, Supply Chain Agent, Regulatory Intelligence Agent, Delivery Intelligence Agent, Inventory Intelligence Agent, Demand Forecast Agent, Student Success Agent, Admissions Intelligence Agent, Project Intelligence Agent, Headcount Intelligence Agent, Skill Gap Agent, Branch Intelligence Agent, Audit Preparation Agent, Warehouse Optimisation Agent, Maintenance Intelligence Agent, Global Reporting Agent, Market Intelligence Agent, Partnership Discovery Agent, Client Acquisition Agent, Competitive Intelligence Agent, Revenue Pipeline Agent
 - Return ONLY the JSON object, no markdown, no explanation`;
 
     try {

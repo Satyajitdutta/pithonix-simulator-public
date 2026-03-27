@@ -55,25 +55,26 @@ const industryBenchmarks = {
         automationROI: { hoursSavedMonthly: 163, processesAutomated: 11, touchpointsEliminated: 47, hitlGates: 9 },
         signals: [
             { signalName: "Regulatory Breach Risk", description: "4 KYC reviews overdue by more than 30 days — RBI compliance window closing in 12 days", confidence: 94, horizon: "12 days ahead", action: "Compliance head alert with case list and priority ranking" },
-            { signalName: "Talent Attrition Signal", description: "2 relationship managers in your wealth division show disengagement signals — attrition risk high", confidence: 79, horizon: "45 days ahead", action: "HR business partner alert with retention playbook" },
-            { signalName: "Budget Overrun Detection", description: "Branch operations spend tracking 14% above Q3 budget — overrun of ₹28L projected", confidence: 82, horizon: "18 days ahead", action: "CFO variance report with branch-level drill-down" }
+            { signalName: "GCC Market Opportunity Gap", description: "Competitor banks have onboarded 34 new corporate clients in UAE and Saudi in the last 90 days — your pipeline has zero GCC deals at equivalent stage", confidence: 87, horizon: "Next 60 days", action: "BD head alert with target account list and partnership entry points" },
+            { signalName: "Partnership Signal Detected", description: "3 Indian conglomerates with existing SBI relationships have announced GCC expansions — strategic banking partnership window is open now", confidence: 82, horizon: "30 days ahead", action: "Relationship manager alert with account expansion playbook" }
         ],
         sixMonthForecast: [
-            { month: 1, capability: "KYC and compliance gap tracking automated" },
-            { month: 2, capability: "Attrition early warning for revenue teams live" },
-            { month: 3, capability: "Branch performance intelligence dashboards active" },
-            { month: 6, capability: "Full regulatory intelligence layer deployed" }
+            { month: 1, capability: "GCC market intelligence scanning live across UAE, Saudi, Qatar" },
+            { month: 2, capability: "Target corporate prospect list built and prioritised" },
+            { month: 3, capability: "Partnership opportunity signals and BD pipeline active" },
+            { month: 4, capability: "Competitive intelligence layer tracking rival bank moves" },
+            { month: 6, capability: "Full GCC market intelligence platform operational" }
         ],
-        agentsActivated: ["Regulatory Compliance Agent", "Talent Risk Agent", "Branch Intelligence Agent", "Audit Preparation Agent"],
+        agentsActivated: ["Market Intelligence Agent", "Partnership Discovery Agent", "Client Acquisition Agent", "Competitive Intelligence Agent", "Global Reporting Agent"],
         outcomeNarratives: {
-            operational: "Your compliance team currently takes 22 days to prepare for each RBI audit — pulling data from 7 systems manually. Pithonix connects to your core banking, HR, and transaction systems. The Compliance Agent tracks every regulatory deadline and builds the audit evidence pack automatically. Audit prep drops from 22 days to 4 days.",
-            revenue: "High-performing relationship managers in banking cost ₹2.6L to replace and take 4 months to reach full productivity. Early identification of attrition risk in your revenue-generating teams protects ₹1.8Cr in productivity value annually at your headcount.",
-            growth: "Your branch heads make staffing and service decisions based on monthly MIS reports that are 3 weeks old. Real-time branch intelligence — customer wait times, transaction volumes, staff utilisation — means faster, more profitable decisions at every branch.",
-            employee: "Branch and operations staff spend 37% of their time on regulatory documentation and manual reporting. Automating the 11 highest-volume compliance workflows returns 163 hours per month to your teams — time that goes into client relationships, not paperwork.",
-            manager: "Your regional managers currently consolidate branch performance data manually before every leadership review. Pithonix delivers an automated regional performance brief — revenue, compliance, staffing, and customer satisfaction — 24 hours before every review meeting."
+            operational: "Your strategy and BD teams currently research GCC market opportunities through manual web searches, consultant reports, and relationship calls — a process that takes 14 days per market review and still misses real-time signals. Pithonix deploys the Market Intelligence Agent to scan GCC corporate activity, regulatory shifts, and competitor moves continuously. Your BD team receives a live market brief every morning instead of a monthly PDF.",
+            revenue: "Banks that enter the GCC market with intelligence-led BD convert 3x more corporate prospects than those using relationship-only approaches. At SBI's scale, even 12 new GCC corporate banking relationships in year one represents ₹18–24Cr in incremental fee and lending revenue. The Client Acquisition Agent surfaces the right targets at the right moment.",
+            growth: "The GCC market opportunity for Indian banks is structural — $2.3T in assets under management, 3.5 million Indian diaspora, and a government push for Indian financial institutions. The window is open now. Pithonix maps the landscape, identifies the first 50 high-value corporate targets, and tracks the partnership entry points your relationship managers need to move fast.",
+            employee: "Your strategy analysts currently spend 70% of their time gathering information and 30% analysing it. Pithonix inverts that ratio. The Market Intelligence Agent handles the data gathering — news monitoring, corporate filings, regulatory updates, competitor tracking — so your team spends their time on decisions, not research.",
+            manager: "Your GCC market entry team currently works from static consultant reports that are 6 months out of date. Pithonix delivers a live intelligence dashboard — market signals, prospect movements, partnership opportunities, and competitor activity — available before every strategy meeting."
         },
-        estimatedROI: { annualValue: "₹2.7Cr", reduction: "41%", paybackMonths: 6 },
-        discoveryScore: 87,
+        estimatedROI: { annualValue: "₹4.8Cr", reduction: "44%", paybackMonths: 5 },
+        discoveryScore: 91,
         legacySystems: [
             { id: 'finacle', name: 'Finacle', category: 'Core Banking' },
             { id: 'sap-hr', name: 'SAP HR', category: 'Human Resources' },
@@ -82,16 +83,22 @@ const industryBenchmarks = {
         ],
         primaryChallenges: [
             {
+                statement: "GCC Market Penetration",
+                initialHurdles: ["No real-time market intelligence", "Fragmented prospect data", "Reactive BD process"],
+                courseCorrectionTime: "3 weeks",
+                projection: "3x improvement in qualified pipeline"
+            },
+            {
                 statement: "Manual KYC/AML Verification Lag",
                 initialHurdles: ["Data Silos in Legacy DB", "Non-standardized Document OCR"],
                 courseCorrectionTime: "3.5 weeks",
                 projection: "92% reduction in verification TAT"
             },
             {
-                statement: "Cross-platform Reconciliation Errors",
-                initialHurdles: ["Batch processing delays", "Manual Entry Mismatches"],
+                statement: "Strategic Partnership Development",
+                initialHurdles: ["No systematic partner discovery", "Missed alliance timing"],
                 courseCorrectionTime: "2 weeks",
-                projection: "99.9% reconciliation accuracy"
+                projection: "8-12 qualified partnership conversations in 90 days"
             }
         ]
     },
