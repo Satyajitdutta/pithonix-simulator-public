@@ -16,10 +16,10 @@ const AgentCard = ({ agent, delay, justification }) => {
     }, [delay]);
 
     const stateMap = [
-        { bg: 'bg-slate-100', dot: 'bg-slate-300', label: 'PENDING', textColor: 'text-slate-400' },
-        { bg: 'bg-slate-200', dot: 'bg-slate-400 animate-pulse', label: 'SCANNING...', textColor: 'text-slate-500' },
-        { bg: 'bg-amber-50', dot: 'bg-amber-400 animate-pulse', label: 'INITIALISING...', textColor: 'text-amber-600' },
-        { bg: 'bg-white border-green-200', dot: 'bg-green-500 animate-pulse', label: 'ACTIVE', textColor: 'text-green-600' }
+        { bg: 'bg-[#1f2833] border-[rgba(102,252,241,0.08)]', dot: 'bg-[#8b8c8d]', label: 'PENDING', textColor: 'text-[#8b8c8d]' },
+        { bg: 'bg-[#2a3340] border-[rgba(102,252,241,0.1)]', dot: 'bg-[#8b8c8d] animate-pulse', label: 'SCANNING...', textColor: 'text-[#c5c6c7]' },
+        { bg: 'bg-[rgba(232,98,58,0.05)] border-[rgba(232,98,58,0.2)]', dot: 'bg-[#e8623a] animate-pulse', label: 'INITIALISING...', textColor: 'text-[#e8623a]' },
+        { bg: 'bg-[#1f2833] border-[rgba(102,252,241,0.25)]', dot: 'bg-[#66fcf1] animate-pulse', label: 'ACTIVE', textColor: 'text-[#66fcf1]' }
     ];
     const s = stateMap[phase];
 
@@ -33,12 +33,12 @@ const AgentCard = ({ agent, delay, justification }) => {
                 <div className={`w-2 h-2 rounded-full ${s.dot}`} />
                 <span className={`text-[9px] font-black uppercase tracking-widest ${s.textColor}`}>{s.label}</span>
             </div>
-            <div className="text-xs font-bold text-[#0A2342]">{agent.icon} {agent.name}</div>
-            <div className="text-[10px] text-slate-400 mt-0.5">{agent.category}</div>
+            <div className="text-xs font-bold text-[#f0f5f9]">{agent.icon} {agent.name}</div>
+            <div className="text-[10px] text-[#8b8c8d] mt-0.5">{agent.category}</div>
 
             {showInfo && justification && (
-                <div className="absolute left-0 right-0 bottom-full mb-2 z-50 bg-[#0A2342] text-white p-3 rounded-xl text-[10px] leading-relaxed shadow-2xl animate-fadeIn border border-white/10">
-                    <div className="font-black text-[#00B4D8] uppercase tracking-widest mb-1 text-[8px]">Intelligence Justification</div>
+                <div className="absolute left-0 right-0 bottom-full mb-2 z-50 bg-[#2a3340] text-[#c5c6c7] p-3 rounded-xl text-[10px] leading-relaxed shadow-2xl animate-fadeIn border border-[rgba(102,252,241,0.15)]">
+                    <div className="font-black text-[#66fcf1] uppercase tracking-widest mb-1 text-[8px]">Intelligence Justification</div>
                     {justification}
                 </div>
             )}
@@ -79,14 +79,14 @@ const SimulatorScreen4 = ({ onNext, simState, setSimState }) => {
 
     if (loading) return (
         <div className="flex flex-col items-center justify-center h-[500px]">
-            <BrainCircuit className="animate-pulse text-[#00B4D8] mb-4" size={48} />
-            <h2 className="text-2xl font-black text-[#0A2342]">Synthesising Intelligence Signals...</h2>
+            <BrainCircuit className="animate-pulse text-[#66fcf1] mb-4" size={48} />
+            <h2 className="text-2xl font-black text-[#f0f5f9]" style={{ fontFamily: 'Montserrat, sans-serif' }}>Synthesising Intelligence Signals...</h2>
         </div>
     );
 
     const signals = Array.isArray(data?.intelligenceSignals) ? data.intelligenceSignals : [];
     const forecast = Array.isArray(data?.sixMonthForecast) ? data.sixMonthForecast : [];
-    const activatedData = Array.isArray(data?.agentsActivated) ? data.agentsActivated : []; // Now array of objects {name, justification}
+    const activatedData = Array.isArray(data?.agentsActivated) ? data.agentsActivated : [];
 
     // Map existing agentLibrary to the activated agents from AI with robust matching
     const displayAgents = activatedData.map(ad => {
@@ -99,7 +99,7 @@ const SimulatorScreen4 = ({ onNext, simState, setSimState }) => {
         return agent ? { ...agent, justification: ad.justification } : null;
     }).filter(Boolean).slice(0, 6);
 
-    // Fallback if AI didn't return any valid agents (shouldn't happen with good prompts)
+    // Fallback if AI didn't return any valid agents
     const finalAgents = displayAgents.length > 0 ? displayAgents : agentLibrary.slice(0, 6).map(a => ({ ...a, justification: "General operational monitoring." }));
 
     return (
@@ -107,15 +107,15 @@ const SimulatorScreen4 = ({ onNext, simState, setSimState }) => {
             <div className="flex justify-between items-end">
                 <div>
                     <div className="flex items-center gap-3 mb-1">
-                        <h1 className="text-3xl font-black text-[#0A2342] uppercase tracking-tight">Layer 2: <span className="text-[#00B4D8]">Intelligence Blueprint</span></h1>
+                        <h1 className="text-3xl font-black text-[#f0f5f9] uppercase tracking-tight" style={{ fontFamily: 'Montserrat, sans-serif' }}>Layer 2: <span className="text-[#66fcf1]">Intelligence Blueprint</span></h1>
                         {data?.isFallback && (
-                            <div className="flex items-center gap-2 px-3 py-1 bg-amber-100 border border-amber-200 rounded-full animate-bounce shadow-sm">
-                                <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-                                <span className="text-[10px] font-bold text-amber-700 uppercase tracking-tighter">Benchmark Fallback Active</span>
+                            <div className="flex items-center gap-2 px-3 py-1 bg-[rgba(232,98,58,0.1)] border border-[rgba(232,98,58,0.3)] rounded-full animate-bounce shadow-sm">
+                                <span className="w-2 h-2 bg-[#e8623a] rounded-full animate-pulse" />
+                                <span className="text-[10px] font-bold text-[#e8623a] uppercase tracking-tighter">Benchmark Fallback Active</span>
                             </div>
                         )}
                     </div>
-                    <p className="text-[#4A4A6A]">Foresight signals that move from efficiency to exponential value.</p>
+                    <p className="text-[#8b8c8d]">Foresight signals that move from efficiency to exponential value.</p>
                 </div>
                 <button onClick={handleNext} className="sim-btn-primary">Final Outcome Simulation →</button>
             </div>
@@ -123,27 +123,27 @@ const SimulatorScreen4 = ({ onNext, simState, setSimState }) => {
             {/* Intelligence Signal Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {signals.map((sig, i) => (
-                    <div key={i} className="sim-card p-6 border-l-4 border-[#00B4D8] relative overflow-hidden">
+                    <div key={i} className="sim-card p-6 border-l-4 border-[#66fcf1] relative overflow-hidden">
                         <div className="flex items-start justify-between mb-3">
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
-                                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                    <span className="text-[10px] font-black text-green-600 uppercase tracking-widest">Live Signal</span>
+                                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                                    <span className="text-[10px] font-black text-green-400 uppercase tracking-widest">Live Signal</span>
                                 </div>
-                                <h5 className="font-black text-[#0A2342] text-base">{sig.signalName}</h5>
+                                <h5 className="font-black text-[#f0f5f9] text-base">{sig.signalName}</h5>
                             </div>
-                            <span className="text-xs font-black text-[#00B4D8] text-right">{sig.horizon}</span>
+                            <span className="text-xs font-black text-[#66fcf1] text-right">{sig.horizon}</span>
                         </div>
-                        <p className="text-sm text-[#4A4A6A] mb-4 leading-relaxed">{sig.description}</p>
+                        <p className="text-sm text-[#c5c6c7] mb-4 leading-relaxed">{sig.description}</p>
                         <div className="mb-3">
-                            <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase mb-1">
+                            <div className="flex justify-between text-[10px] font-black text-[#8b8c8d] uppercase mb-1">
                                 <span>Confidence</span><span>{sig.confidence}%</span>
                             </div>
-                            <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                <div className="h-1.5 bg-[#00B4D8] rounded-full transition-all duration-1000" style={{ width: `${sig.confidence}%` }} />
+                            <div className="h-1.5 bg-[rgba(102,252,241,0.1)] rounded-full overflow-hidden">
+                                <div className="h-1.5 bg-[#66fcf1] rounded-full transition-all duration-1000" style={{ width: `${sig.confidence}%` }} />
                             </div>
                         </div>
-                        <div className="text-[10px] text-[#0A2342] bg-[#00B4D8]/10 px-3 py-2 rounded-lg font-semibold">
+                        <div className="text-[10px] text-[#66fcf1] bg-[rgba(102,252,241,0.08)] px-3 py-2 rounded-lg font-semibold">
                             ↗ {sig.action}
                         </div>
                     </div>
@@ -152,17 +152,17 @@ const SimulatorScreen4 = ({ onNext, simState, setSimState }) => {
 
             {/* 6-Month Forecast Timeline */}
             <div className="sim-card p-6">
-                <h4 className="text-xs font-black text-[#4A4A6A] uppercase tracking-widest mb-6">6-Month Capability Roadmap</h4>
+                <h4 className="text-xs font-black text-[#8b8c8d] uppercase tracking-widest mb-6">6-Month Capability Roadmap</h4>
                 <div className="flex items-start justify-between gap-4 overflow-x-auto">
                     {forecast.map((item, i) => (
                         <div key={i} className="flex flex-col items-center text-center min-w-[130px]">
-                            <div className="w-10 h-10 rounded-full bg-[#0A2342] flex items-center justify-center text-[#00B4D8] font-black text-sm mb-2">
+                            <div className="w-10 h-10 rounded-full bg-[#1f2833] border border-[rgba(102,252,241,0.2)] flex items-center justify-center text-[#66fcf1] font-black text-sm mb-2">
                                 M{item.month}
                             </div>
                             {i < forecast.length - 1 && (
-                                <div className="hidden md:block absolute ml-[130px] mt-5 w-[calc(25%-30px)] h-0.5 bg-slate-200" />
+                                <div className="hidden md:block absolute ml-[130px] mt-5 w-[calc(25%-30px)] h-0.5 bg-[rgba(102,252,241,0.15)]" />
                             )}
-                            <p className="text-xs text-[#4A4A6A] font-semibold leading-tight">{item.capability}</p>
+                            <p className="text-xs text-[#c5c6c7] font-semibold leading-tight">{item.capability}</p>
                         </div>
                     ))}
                 </div>
@@ -171,8 +171,8 @@ const SimulatorScreen4 = ({ onNext, simState, setSimState }) => {
             {/* Agent Activation Animation */}
             <div className="sim-card p-6">
                 <div className="flex items-center gap-2 mb-4">
-                    <Sparkles size={16} className="text-[#F4A261]" />
-                    <h4 className="text-xs font-black text-[#4A4A6A] uppercase tracking-widest">Agents Activating</h4>
+                    <Sparkles size={16} className="text-[#e8623a]" />
+                    <h4 className="text-xs font-black text-[#8b8c8d] uppercase tracking-widest">Agents Activating</h4>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {finalAgents.map((agent, i) => (

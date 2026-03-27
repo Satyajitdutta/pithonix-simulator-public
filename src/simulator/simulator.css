@@ -1,31 +1,43 @@
-/* Pithonix Discovery Simulator Styles */
+/* Pithonix Discovery Simulator — Dark Theme (matches pithonix.ai) */
 :root {
-  --sim-navy: #0A2342;
-  --sim-teal: #00B4D8;
-  --sim-gold: #F4A261;
-  --sim-white: #FFFFFF;
-  --sim-bg: #F8FAFC;
-  --sim-text-primary: #1A1A2E;
-  --sim-text-secondary: #4A4A6A;
-  --sim-success: #06D6A0;
-  --sim-warning: #FFB703;
+  --sim-bg: #0b0c10;
+  --sim-card: #1f2833;
+  --sim-card-l: #2a3340;
+  --sim-silver: #c5c6c7;
+  --sim-silver-d: #8b8c8d;
+  --sim-white: #f0f5f9;
+  --sim-cyan: #66fcf1;
+  --sim-teal: #45a29e;
+  --sim-orange: #e8623a;
+  --sim-purple: #a78bfa;
+  --sim-glass: rgba(255,255,255,0.03);
+  --sim-gb: rgba(102,252,241,0.12);
+  --sim-gbh: rgba(102,252,241,0.25);
+  /* Legacy compat aliases */
+  --sim-navy: #1f2833;
+  --sim-gold: #e8623a;
+  --sim-text-primary: #f0f5f9;
+  --sim-text-secondary: #8b8c8d;
+  --sim-success: #66fcf1;
+  --sim-warning: #e8623a;
 }
 
 .simulator-container {
-  font-family: 'Inter', sans-serif;
-  color: var(--sim-text-primary);
+  font-family: 'Roboto', sans-serif;
+  color: var(--sim-silver);
+  background-color: var(--sim-bg);
 }
 
 .sim-card {
-  background: var(--sim-white);
+  background: var(--sim-card);
   border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--sim-gb);
 }
 
 .sim-btn-primary {
-  background-color: var(--sim-navy);
-  color: white;
+  background-color: var(--sim-cyan);
+  color: #0b0c10;
   padding: 1rem 2rem;
   border-radius: 8px;
   font-weight: 700;
@@ -43,14 +55,14 @@
 }
 
 .sim-progress-bar-bg {
-  background-color: #E2E8F0;
+  background-color: rgba(102, 252, 241, 0.1);
   height: 8px;
   border-radius: 4px;
   width: 100%;
 }
 
 .sim-progress-bar-fill {
-  background-color: var(--sim-teal);
+  background-color: var(--sim-cyan);
   height: 100%;
   border-radius: 4px;
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -94,9 +106,7 @@
 
 .scrollbar-hide {
   -ms-overflow-style: none;
-  /* IE and Edge */
   scrollbar-width: none;
-  /* Firefox */
 }
 
 /* Ensure images and videos in markdown don't overflow */
@@ -105,4 +115,19 @@
   max-width: 100%;
   border-radius: 8px;
   margin: 1rem 0;
+}
+
+/* Input / select dark theme override */
+input, select, textarea {
+  color: #f0f5f9;
+  background-color: #2a3340;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #8b8c8d;
+}
+
+select option {
+  background-color: #1f2833;
+  color: #f0f5f9;
 }

@@ -5,7 +5,7 @@ const SimProgressBar = ({ currentStep, totalSteps }) => {
 
     return (
         <div className="w-full">
-            <div className="flex justify-between mb-2 text-sm font-bold text-[#4A4A6A]">
+            <div className="flex justify-between mb-2 text-sm font-bold text-[#8b8c8d]">
                 <span>STEP {currentStep} OF {totalSteps}</span>
                 <span>{Math.round(percentage)}% COMPLETE</span>
             </div>
