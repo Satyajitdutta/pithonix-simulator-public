@@ -1,20 +1,9 @@
 import { getBenchmark } from '../data/industryBenchmarks.js';
 
 // SECTION 1 — BASE CONFIGURATION
-const GEMINI_MODEL = 'gemini-2.5-flash'
-const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`
-
-const getApiKey = () => {
-    // Vite / Browser environment
-    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_GEMINI_API_KEY) {
-        return import.meta.env.VITE_GEMINI_API_KEY;
-    }
-    // Node.js environment (for tests)
-    if (typeof process !== 'undefined' && process.env && process.env.VITE_GEMINI_API_KEY) {
-        return process.env.VITE_GEMINI_API_KEY;
-    }
-    return null;
-};
+const GEMINI_MODEL = 'gemini-2.5-pro'
+// All Gemini calls route through /api/gemini — key stays server-side, never in browser
+const GEMINI_ENDPOINT = '/api/gemini'
 
 const HARI_IDENTITY = `
 You are HARI — Human Augmented Realistic Intelligence (Human-in-the-loop AI). 
@@ -108,10 +97,8 @@ async function callGemini({
     conversationId = null,
     turn = 0
 }) {
-    const apiKey = getApiKey()
-    if (!apiKey) throw new Error('VITE_GEMINI_API_KEY not set')
-
     const requestBody = {
+        _model: GEMINI_MODEL,
         system_instruction: {
             parts: [{ text: systemPrompt }]
         },
@@ -122,10 +109,10 @@ async function callGemini({
         }
     }
 
-    console.log(`[HARI-THINKING] Calling ${GEMINI_MODEL} | Turn: ${turn}`)
+    console.log(`[HARI-THINKING] Calling ${GEMINI_MODEL} via proxy | Turn: ${turn}`)
 
     try {
-        const response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+        const response = await fetch(GEMINI_ENDPOINT, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(requestBody),
@@ -430,10 +417,7 @@ Rules:
 - Return ONLY the JSON object, no markdown, no explanation`;
 
     try {
-        if (!getApiKey()) {
-            console.warn('[HARI-SIM] No Gemini API key found. Falling back to industry benchmarks.');
-            throw new Error('MISSING_API_KEY');
-        }
+        // Key is now server-side — no client-side check needed
 
         const result = await callGemini({
             systemPrompt,
