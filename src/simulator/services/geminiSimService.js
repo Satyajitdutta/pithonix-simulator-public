@@ -1,7 +1,7 @@
 import { getBenchmark } from '../data/industryBenchmarks.js';
 
 // SECTION 1 — BASE CONFIGURATION
-const GEMINI_MODEL = 'gemini-2.5-flash'
+const GEMINI_MODEL = 'gemini-2.5-pro'
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`
 
 const getApiKey = () => {
