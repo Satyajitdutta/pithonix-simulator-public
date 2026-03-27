@@ -126,7 +126,7 @@ const SimulatorApp = () => {
                     <footer className="max-w-6xl w-full mx-auto px-6 py-4 flex-shrink-0 text-[10px] text-[#8b8c8d] font-bold uppercase tracking-widest flex items-center justify-center gap-4">
                         <span>Pithonix Global Enterprise Intelligence</span>
                         <span className="w-1 h-1 bg-[#8b8c8d] rounded-full" />
-                        <span className="text-[#66fcf1]">Diagnostic Engine: Gemini 2.5 Flash</span>
+                        <span className="text-[#66fcf1]">HARI Intelligence Engine · Gemini 2.5 Pro</span>
                     </footer>
                 )}
             </div>
